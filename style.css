@@ -1,0 +1,44 @@
+/* ========================================================================== */
+/* General */
+/* ========================================================================== */
+
+
+
+/* CSS Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+/* ========================================================================== */
+/* Main */
+/* ========================================================================== */
+
+
+.main {
+    height: 70vh;
+    width: 70vw;
+    border: 2px solid black;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.cell {
+    width: auto;
+    height: auto;
+    border: 2px solid black;
+}
