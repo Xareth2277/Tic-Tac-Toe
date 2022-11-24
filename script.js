@@ -21,11 +21,18 @@ const gameBoard = (() => {
     };
     
     function setField(e) {
+        if (e.target.textContent != "") {
+            return      //check if field is occupied
+        };
         const targetID = e.target.getAttribute('id');   
-        board[targetID] = 'X';
-        e.target.textContent = 'X';
+        if (game.playerOne.playerTurn) {
+            board[targetID] = 'X';
+            e.target.textContent = 'X';
+        } else if (game.playerTwo.playerTurn) {
+            board[targetID] = 'O';
+            e.target.textContent = 'O';
+        };
         game.switchTurns();
-        // check if field is already occupied
     };
     
     // function for restarting the game
@@ -63,12 +70,11 @@ const game = (() => {
             playerOne.playerTurn = true;
             playerTwo.playerTurn = false;
         };
-        console.log(playerOne.playerTurn);
     };
     
     // check for win or draw with message about the outcome
 
-    return { switchTurns };
+    return { switchTurns, playerOne, playerTwo };
 
 })();
 
