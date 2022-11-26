@@ -4,13 +4,13 @@
 
 "use strict"
 
-const testButton = document.querySelector('.testButton');
+const resetButton = document.querySelector('.resetButton');
 
 const gameBoard = (() => {
     const board = ["", "", "", "", "", "", "", "", ""];
+    const main = document.querySelector('.main');
     
     function setupBoard() {
-        const main = document.querySelector('.main');
 
         for (let c = 0; c < (board.length); c++) {
             const cell = document.createElement('div');
@@ -22,7 +22,7 @@ const gameBoard = (() => {
     
     function setField(e) {
         if (e.target.textContent != "") {
-            return      //check if field is occupied
+            return;      //check if field is occupied
         };
         const targetID = e.target.getAttribute('id');   
         if (game.playerOne.playerTurn) {
@@ -35,9 +35,15 @@ const gameBoard = (() => {
         game.switchTurns();
     };
     
-    // function for restarting the game
+    function resetBoard() {
+        for (let i = 0; i < (board.length); i++) {
+            board[i] = "";      //clears board array
+        };
+        main.innerHTML = "";
+        setupBoard();
+    };
 
-    return { setupBoard };
+    return { setupBoard, resetBoard };
     
 })();
 
@@ -55,6 +61,7 @@ const game = (() => {
     askName();
     
     function askName() {
+        //TODO: adding names with a field and defaults to p1 and p2
         const playerOneName = prompt("Player 1 name: ");
         const playerTwoName = prompt("Player 2 name: ");
         playerOne = Player(playerOneName);
@@ -72,13 +79,20 @@ const game = (() => {
         };
     };
     
-    // check for win or draw with message about the outcome
+    //TODO: check for win or draw with message about the outcome
 
     return { switchTurns, playerOne, playerTwo };
 
 })();
 
-testButton.addEventListener("click", () => {
-    game.switchTurns(game.playerOne, game.playerTwo);
+
+// Tests
+
+// testButton.addEventListener("click", () => {
+//     game.switchTurns(game.playerOne, game.playerTwo);
+// });
+
+resetButton.addEventListener("click", () => {
+    gameBoard.resetBoard();
 });
 
