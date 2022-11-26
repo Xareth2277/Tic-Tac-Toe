@@ -25,10 +25,10 @@ const gameBoard = (() => {
             return;      //check if field is occupied
         };
         const targetID = e.target.getAttribute('id');   
-        if (game.playerOne.playerTurn) {
+        if (game.playerX.playerTurn) {
             board[targetID] = 'X';
             e.target.textContent = 'X';
-        } else if (game.playerTwo.playerTurn) {
+        } else if (game.playerO.playerTurn) {
             board[targetID] = 'O';
             e.target.textContent = 'O';
         };
@@ -48,7 +48,6 @@ const gameBoard = (() => {
 })();
 
 const Player = (name, playerTurn) => {
-    playerTurn = false;
     return { name, playerTurn };
 };
 
@@ -56,32 +55,22 @@ const game = (() => {
     
     // Init
     gameBoard.setupBoard();
-    let playerOne;
-    let playerTwo;
-    askName();
-    
-    function askName() {
-        //TODO: adding names with a field and defaults to p1 and p2
-        const playerOneName = prompt("Player 1 name: ");
-        const playerTwoName = prompt("Player 2 name: ");
-        playerOne = Player(playerOneName);
-        playerOne.playerTurn = true;    //player one starts the game
-        playerTwo = Player(playerTwoName);
-    };
+    const playerX = Player('X', true);
+    const playerO = Player('O', false);
     
     function switchTurns() {
-        if (playerOne.playerTurn) {
-            playerOne.playerTurn = false;
-            playerTwo.playerTurn = true;
-        } else if (playerTwo.playerTurn) {
-            playerOne.playerTurn = true;
-            playerTwo.playerTurn = false;
+        if (playerX.playerTurn) {
+            playerX.playerTurn = false;
+            playerO.playerTurn = true;
+        } else if (playerO.playerTurn) {
+            playerX.playerTurn = true;
+            playerO.playerTurn = false;
         };
     };
     
     //TODO: check for win or draw with message about the outcome
 
-    return { switchTurns, playerOne, playerTwo };
+    return { switchTurns, playerX, playerO };
 
 })();
 
@@ -89,7 +78,7 @@ const game = (() => {
 // Tests
 
 // testButton.addEventListener("click", () => {
-//     game.switchTurns(game.playerOne, game.playerTwo);
+//     game.switchTurns(game.playerX, game.playerO);
 // });
 
 resetButton.addEventListener("click", () => {
