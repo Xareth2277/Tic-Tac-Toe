@@ -4,14 +4,14 @@
 
 "use strict"
 
-const resetButton = document.querySelector('.resetButton');
 
 const gameBoard = (() => {
     const board = ["", "", "", "", "", "", "", "", ""];
     const main = document.querySelector('.main');
+    const resetBtn = document.querySelector('.resetBtn');
+    resetBtn.addEventListener("click", resetBoard);
     
     function setupBoard() {
-
         for (let c = 0; c < (board.length); c++) {
             const cell = document.createElement('div');
             cell.setAttribute('id', c);
@@ -33,6 +33,7 @@ const gameBoard = (() => {
             e.target.textContent = 'O';
         };
         game.switchTurns();
+        game.winCheck();
     };
     
     function resetBoard() {
@@ -40,11 +41,11 @@ const gameBoard = (() => {
             board[i] = "";      //clears board array
         };
         main.innerHTML = "";
-        setupBoard();
+        game.init();
     };
 
-    return { setupBoard, resetBoard };
-    
+    return { setupBoard, resetBoard, board };
+
 })();
 
 const Player = (name, playerTurn) => {
@@ -53,35 +54,69 @@ const Player = (name, playerTurn) => {
 
 const game = (() => {
     
-    // Init
-    gameBoard.setupBoard();
     const playerX = Player('X', true);
     const playerO = Player('O', false);
     
-    function switchTurns() {
+    function init() {
+        playerX.playerTurn = true;
+        playerO.playerTurn = false;
+        gameBoard.setupBoard();
+        displayMessage();
+    };
+    
+    function displayMessage() {
+        const message = document.querySelector('.message');
         if (playerX.playerTurn) {
-            playerX.playerTurn = false;
-            playerO.playerTurn = true;
+            message.textContent = "Player X's turn";
         } else if (playerO.playerTurn) {
-            playerX.playerTurn = true;
-            playerO.playerTurn = false;
+            message.textContent = "Player O's turn";
         };
+    };
+
+    function switchTurns() {
+        if (game.playerX.playerTurn) {
+            game.playerX.playerTurn = false;
+            game.playerO.playerTurn = true;
+        } else if (game.playerO.playerTurn) {
+            game.playerX.playerTurn = true;
+            game.playerO.playerTurn = false;
+        };
+        displayMessage();
     };
     
     //TODO: check for win or draw with message about the outcome
+    const winConditions = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
 
-    return { switchTurns, playerX, playerO };
+    function winCheck() {
+        for (let i = 0; i < winConditions.length; i++) {
+            const winCondition = winConditions[i];
+            let a = gameBoard.board[winCondition[0]];
+            let b = gameBoard.board[winCondition[1]];
+            let c = gameBoard.board[winCondition[2]];
+            if (a === '' || b === '' || c === '') {
+                continue;
+            } else if (a === b && b === c) {
+                console.log('Game Won');
+                break;
+            } else if (!gameBoard.board.includes("")) {
+                console.log('Draw');
+                break;
+            };
+        };
+    };
+
+    init();
+
+    return { init, switchTurns, playerX, playerO, winCheck };
 
 })();
-
-
-// Tests
-
-// testButton.addEventListener("click", () => {
-//     game.switchTurns(game.playerX, game.playerO);
-// });
-
-resetButton.addEventListener("click", () => {
-    gameBoard.resetBoard();
-});
 
