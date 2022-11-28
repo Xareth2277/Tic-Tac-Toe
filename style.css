@@ -29,10 +29,19 @@ body {
     height: 70vh;
     width: 70vw;
     border: 2px solid black;
-
+    
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
+}
+
+.main > * {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 18vmin;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .cell {
