@@ -54,10 +54,12 @@ const Player = (name, playerTurn) => {
 
 const game = (() => {
     
-    const playerX = Player('X', true);
-    const playerO = Player('O', false);
+    let gameActive = true;
+    const playerX = Player('X');
+    const playerO = Player('O');
     
     function init() {
+        gameActive = true;
         playerX.playerTurn = true;
         playerO.playerTurn = false;
         gameBoard.setupBoard();
@@ -66,7 +68,13 @@ const game = (() => {
     
     function displayMessage() {
         const message = document.querySelector('.message');
-        if (playerX.playerTurn) {
+        if (!gameActive && playerO.playerTurn) {
+            message.textContent = "Player X won!";
+        } else if (!gameActive && playerX.playerTurn) {
+            message.textContent = "Player O won!";
+        } else if (!playerX.playerTurn && !playerO.playerTurn) {
+            message.textContent = "It's a draw!";
+        } else if (playerX.playerTurn) {
             message.textContent = "Player X's turn";
         } else if (playerO.playerTurn) {
             message.textContent = "Player O's turn";
@@ -84,7 +92,6 @@ const game = (() => {
         displayMessage();
     };
     
-    //TODO: check for win or draw with message about the outcome
     const winConditions = [
         [0, 1, 2],
         [3, 4, 5],
@@ -105,10 +112,13 @@ const game = (() => {
             if (a === '' || b === '' || c === '') {
                 continue;
             } else if (a === b && b === c) {
-                console.log('Game Won');
+                gameActive = false;
+                displayMessage();
                 break;
             } else if (!gameBoard.board.includes("")) {
-                console.log('Draw');
+                playerX.playerTurn = false;
+                playerO.playerTurn = false;
+                displayMessage();
                 break;
             };
         };
